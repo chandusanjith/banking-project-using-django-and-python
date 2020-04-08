@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from mysite.views import main, signup,login, index, createcust, addcust, logout, opsavings, fdload, addfd, addsb,loadselftran, selftran, loadtranother, othertran
+from mysite.views import main, signup,login, index, createcust, addcust, logout, opsavings, fdload, addfd, addsb,loadselftran, selftran, loadtranother, othertran, loadpassbook, loadpbac
 
 urlpatterns = [
     path('admin/', admin.site.urls),  
@@ -33,6 +33,8 @@ urlpatterns = [
     path('tranself/', loadselftran),
     path('selftran/', selftran ),
     path('tranother/', loadtranother),
-    path('othertran/', othertran)
+    path('othertran/', othertran),
+    path('pass/', loadpbac),
+    path('checkpb/', loadpassbook)
 
 ]

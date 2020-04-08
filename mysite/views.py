@@ -187,7 +187,7 @@ def selftran(request):
           dbbal = str(dbbal)
           invm.objects.filter(custnum = fromaccount).update(balance = dbbal)
           piece1 = "transfer by self from"
-          piece2 = "to" 
+          piece2 = " to " 
           sysnarr = piece1 + fromaccount + piece2 + toaccount
           glifentry = glif(accno = fromaccount, drcr = 'DR', balbefore = balance, balafter = dbbal, tranamt = tranamt, trandate =  date.today(), sysnarr = sysnarr,usernarr = narr  )
           glifentry.save()
@@ -231,8 +231,8 @@ def othertran(request):
           dbbal = balance - tranamt
           dbbal = str(dbbal)
           invm.objects.filter(custnum = fromaccount).update(balance = dbbal)
-          piece1 = "transfer to"
-          piece2 = "by" 
+          piece1 = "transfer to "
+          piece2 = " by " 
           sysnarr = piece1 + namecr + piece2 + namedr
           glifentry = glif(accno = fromaccount, drcr = 'DR', balbefore = balance, balafter = dbbal, tranamt = tranamt, trandate =  date.today(), sysnarr = sysnarr,usernarr = narr  )
           glifentry.save()          
@@ -245,3 +245,16 @@ def othertran(request):
           glifentry.save()
           messages.info(request, sysnarr)
           return HttpResponseRedirect('/index/')
+
+def loadpbac(request):
+  user = request.user
+  acdetails = invm.objects.filter(loginid = user)
+  print(acdetails)
+  context={'accnum': acdetails}
+  return render(request, 'selectaccforpass.html', context)
+
+def loadpassbook(request):
+  acct = request.POST['acct']
+  transactions = glif.objects.filter(accno = acct)
+  context={'trandet': transactions}
+  return render(request, 'passbook.html', context)
