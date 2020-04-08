@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from datetime import datetime
+from datetime import datetime, date
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User, auth
@@ -193,6 +193,50 @@ def selftran(request):
           glifentry.save()
           ta = invm.objects.filter(custnum = toaccount )
           tobalance = ta[0].balance
+          tobalance = int(tobalance)
+          tocrbal = tobalance + tranamt
+          tocrbal = str(tocrbal)
+          invm.objects.filter(custnum = toaccount).update(balance = tocrbal) 
+          glifentry = glif(accno = toaccount, drcr = 'CR', balbefore = tobalance, balafter = tocrbal, tranamt = tranamt, trandate =  date.today(), sysnarr = sysnarr,usernarr = narr )
+          glifentry.save()
+          messages.info(request, sysnarr)
+          return HttpResponseRedirect('/index/')
+
+def loadtranother(request):
+  user = request.user
+  acdetails = invm.objects.filter(loginid = user)
+  print(acdetails)
+  context={'accnum': acdetails}
+  return render(request, 'othertran.html', context)
+
+def othertran(request):
+   if not request.user.is_authenticated:
+        return render(request, 'main.html')
+   else:
+     fromaccount = request.POST['fracct']
+     toaccount = request.POST['toacct']
+     tranamt = request.POST['trbal']
+     narr = request.POST['nar']
+     if fromaccount == toaccount:
+       messages.info(request,'From Account and TO Account Cannot be same ')
+       return HttpResponseRedirect('/index/')
+     else: 
+          fa = invm.objects.filter(custnum = fromaccount )
+          ta = invm.objects.filter(custnum = toaccount )
+          namecr = ta[0].loginid
+          balance = fa[0].balance
+          namedr = fa[0].loginid
+          balance = int(balance)
+          tranamt = int(tranamt)
+          dbbal = balance - tranamt
+          dbbal = str(dbbal)
+          invm.objects.filter(custnum = fromaccount).update(balance = dbbal)
+          piece1 = "transfer to"
+          piece2 = "by" 
+          sysnarr = piece1 + namecr + piece2 + namedr
+          glifentry = glif(accno = fromaccount, drcr = 'DR', balbefore = balance, balafter = dbbal, tranamt = tranamt, trandate =  date.today(), sysnarr = sysnarr,usernarr = narr  )
+          glifentry.save()          
+          tobalance = ta[0].balance          
           tobalance = int(tobalance)
           tocrbal = tobalance + tranamt
           tocrbal = str(tocrbal)
