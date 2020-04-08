@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    {% load static %}
+  	<title>Banking</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cardview.css' %}">
+  </head>
+  <body>
+		
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar">
+				<div class="p-4 pt-5">
+		  		<a href="#" class="img logo rounded-circle mb-5" style="background-image: url({% static 'images/logo.jpg' %});"></a>
+          <a href="/logout">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logout</a>
+	        <ul class="list-unstyled components mb-5">
+	          <li class="active">
+                    <a href="#">Home</a>
+                </li>
+	          <li>
+	              <a href="createcust/">Create New Customer account</a>
+	          </li>
+	          <li>
+              <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Create New Account</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu1">
+                <li>
+                    <a href="saving/">Create New Savings Account</a>
+                </li>
+                <li>
+                    <a href="fd/">Create FD Account</a>
+                </li>
+              </ul>
+	          </li>
+	          <li>
+              <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Transfer Money</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu2">
+                <li>
+                    <a href="/tranself">Transfer money to self account</a>
+                </li>
+                <li>
+                    <a href="saving/">Transfer money other account</a>
+                </li>
+                
+              </ul>
+	          </li>
+	          <li>
+              <li>
+                    <a href="saving/">Deopsit Money</a>
+                </li>
+                <li>
+                    <a href="saving/">Withdraw Money</a>
+                </li>
+              <li>
+                    <a href="#">Passbook</a>
+                </li>
+                 <li>
+                    <a href="#">Source code</a>
+                </li>
+	          </li>
+	        </ul>
+
+	        <div class="footer">
+	        	<p>
+						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This Application is developed  <i class="icon-heart" aria-hidden="true"></i> by <a href="www.parameterlabs.com" target="_blank">parameterlabs.com</a>
+              <a> ,a small startup by Chandu sanjith .T </a>
+						</p>
+	        </div>
+
+	      </div>
+    	</nav>
+
+        <!-- Page Content  -->
+   {% if messages %}
+    {% for message in messages %}
+    <script>
+		alert("{{ message }}");  // display string message
+    </script>
+    {% endfor %} 
+    {% endif %}
+      <div id="content" class="p-4 p-md-5">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+              <i class="fa fa-bars"></i>
+              <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+            <h4 color ="#EEE8AA"> Welcome {{ user}} </h4>
+          </div>
+        </nav>
+<div class="fond"> <span class="s1">BANKING</span>
+<div class="card">
+  <div class="thumbnail"><img class="left" src="https://cdn2.hubspot.net/hubfs/322787/Mychefcom/images/BLOG/Header-Blog/photo-culinaire-pexels.jpg"/></div>
+  <div class="right">
+    <h1>Your Details</h1>
+    <div class="separator"></div>
+    <p> {% for item in details_cust %} 
+        <li>Name:{{ item.name }}</li>
+        <li>Custmernumber:{{ item.custnum }}</li>
+    {% empty %} 
+        <p>Data not available, click on create new customer to get started!!! </p>
+    {% endfor %} 
+     <div class="separator"></div>
+    {% for item in details_acct %}
+        <li> Account Number:  {{ item.custnum }}</li>
+         {% if item.acctype == 'SB' %}
+        <li> Account Type:Savings</li>
+        {% endif %}
+        {% if item.acctype == 'FD' %}
+        <li> Account Type:Fixed Deposit</li>
+        {% endif %}
+        <li> Balance: {{ item.balance }}</li>
+        <div class="separator"></div>
+    {% empty %} 
+        <p> No accounts found!!, Create new accounts </p>
+        
+    {% endfor %} 
+     </p>
+  </div>
+  <span class="s2">{{ date }}</span>
+  <div class="fab"><i class="fa fa-arrow-down fa-3x"> </i></div>
+  </body>
+</div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>
