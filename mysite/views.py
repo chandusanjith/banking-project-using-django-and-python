@@ -111,17 +111,25 @@ def logout(request):
 
 
 def opsavings(request):
+  user = request.user
   if not request.user.is_authenticated:
         return render(request, 'main.html')
-  else:
+  elif cusm.objects.filter(loginid = user).exists():
       return render(request, 'opsavings.html')  
+  else:
+      messages.info(request,'Customer number Does not exist, try creating customer number first ')
+      return HttpResponseRedirect('/index/')
 
 
 def fdload(request):
+  user = request.user
   if not request.user.is_authenticated:
         return render(request, 'main.html')
+  elif cusm.objects.filter(loginid = user).exists():
+      return render(request, 'fdaccount.html')  
   else:
-      return render(request, 'fdaccount.html')
+      messages.info(request,'Customer number Does not exist, try creating customer number first ')
+      return HttpResponseRedirect('/index/')
 
 
 def addfd(request):
@@ -165,15 +173,17 @@ def addsb(request):
     return HttpResponseRedirect('/index/')
 
 def loadselftran(request):
+  user = request.user
   if not request.user.is_authenticated:
         return render(request, 'main.html')
-  else:
-     user = request.user
+  elif cusm.objects.filter(loginid = user).exists() & invm.objects.filter(loginid = user).exists():
      acdetails = invm.objects.filter(loginid = user)
      print(acdetails)
      context={'accnum': acdetails}
      return render(request, 'selftran.html', context)
-
+  else:
+      messages.info(request,'Customer or Account Does not exist, try creating customer number or Account first and try this feature ')
+      return HttpResponseRedirect('/index/')
 
 def selftran(request):
   if not request.user.is_authenticated:
@@ -211,14 +221,20 @@ def selftran(request):
           return HttpResponseRedirect('/index/')
 
 def loadtranother(request):
+  user = request.user
   if not request.user.is_authenticated:
         return render(request, 'main.html')
-  else:
-     user = request.user
+  elif cusm.objects.filter(loginid = user).exists() & invm.objects.filter(loginid = user).exists():
      acdetails = invm.objects.filter(loginid = user)
      print(acdetails)
      context={'accnum': acdetails}
      return render(request, 'othertran.html', context)
+  else:
+      messages.info(request,'Customer or Account Does not exist, try creating customer number or Account first and try this feature ')
+      return HttpResponseRedirect('/index/')
+
+
+
 
 def othertran(request):
    if not request.user.is_authenticated:
@@ -258,33 +274,49 @@ def othertran(request):
           return HttpResponseRedirect('/index/')
 
 def loadpbac(request):
+  user = request.user
   if not request.user.is_authenticated:
         return render(request, 'main.html')
+  elif cusm.objects.filter(loginid = user).exists() & invm.objects.filter(loginid = user).exists():
+      acdetails = invm.objects.filter(loginid = user)
+      print(acdetails)
+      context={'accnum': acdetails}
+      return render(request, 'selectaccforpass.html', context)
   else:
-    user = request.user
-    acdetails = invm.objects.filter(loginid = user)
-    print(acdetails)
-    context={'accnum': acdetails}
-    return render(request, 'selectaccforpass.html', context)
+      messages.info(request,'Customer or Account Does not exist, try creating customer number or Account first and try this feature ')
+      return HttpResponseRedirect('/index/')
+
+
+
 
 def loadpassbook(request):
+  user = request.user
   if not request.user.is_authenticated:
         return render(request, 'main.html')
-  else:
+  elif cusm.objects.filter(loginid = user).exists() & invm.objects.filter(loginid = user).exists():
      acct = request.POST['acct']
      transactions = glif.objects.filter(accno = acct)
      context={'trandet': transactions}
      return render(request, 'passbook.html', context)
+  else:
+      messages.info(request,'Customer or Account Does not exist, try creating customer number or Account first and try this feature ')
+      return HttpResponseRedirect('/index/')
+
+
 
 def loaddepwith(request):
+  user = request.user
   if not request.user.is_authenticated:
         return render(request, 'main.html')
-  else:
-     user = request.user
+  elif cusm.objects.filter(loginid = user).exists() & invm.objects.filter(loginid = user).exists():
      acdetails = invm.objects.filter(loginid = user)
      print(acdetails)
      context={'accnum': acdetails}
      return render(request, 'drawdep.html', context)
+  else:
+      messages.info(request,'Customer or Account Does not exist, try creating customer number or Account first and try this feature ')
+      return HttpResponseRedirect('/index/')
+
 
 def depdraw(request):
   if not request.user.is_authenticated:
