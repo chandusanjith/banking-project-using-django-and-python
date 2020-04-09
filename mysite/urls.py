@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from mysite.views import main, signup,login, index, createcust, addcust, logout, opsavings, fdload, addfd, addsb,loadselftran, selftran, loadtranother, othertran, loadpassbook, loadpbac, loaddepwith, depdraw, custdet, accdet, developer
+from mysite.views import main, signup,login, index, createcust, addcust, logout, opsavings, fdload, addfd, addsb,loadselftran, selftran, loadtranother, othertran, loadpassbook, loadpbac, loaddepwith, depdraw, custdet, accdet, developer, html_to_pdf_view
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
@@ -40,6 +40,7 @@ urlpatterns = [
     path('dradepmoney/', depdraw),
     path('cusdet/', custdet),
     path('accdet/', accdet),
-    path('developer/', developer)
+    path('developer/', developer),
+    path('printcustpdf/', html_to_pdf_view)
 
 ]

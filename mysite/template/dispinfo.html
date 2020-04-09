@@ -35,7 +35,9 @@
          <form action="/index/" method = 'POST'> {% csrf_token %}
         <button  class="profile-card__button button--blue js-message-btn" >GO back</button>
         </form>
+        <form action="/printcustpdf/" method = 'POST'> {% csrf_token %}
         <button class="profile-card__button button--orange">Download E-card</button>
+        </form>
       </div>
     </div>
 
