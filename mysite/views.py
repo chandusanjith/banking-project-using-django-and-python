@@ -201,6 +201,9 @@ def selftran(request):
           balance = fa[0].balance
           balance = int(balance)
           tranamt = int(tranamt)
+          if balance < tranamt:
+             messages.info(request,'Low account balance !!!!!!!')
+             return HttpResponseRedirect('/index/')
           dbbal = balance - tranamt
           dbbal = str(dbbal)
           invm.objects.filter(custnum = fromaccount).update(balance = dbbal)
@@ -255,6 +258,9 @@ def othertran(request):
           namedr = fa[0].loginid
           balance = int(balance)
           tranamt = int(tranamt)
+          if balance < tranamt:
+             messages.info(request,'Low account balance !!!!!!!')
+             return HttpResponseRedirect('/index/')
           dbbal = balance - tranamt
           dbbal = str(dbbal)
           invm.objects.filter(custnum = fromaccount).update(balance = dbbal)
@@ -331,7 +337,11 @@ def depdraw(request):
       bal = int(bal)
       tranamt = int(tranamt)
       if option == 'withdraw':
-         finalbal = bal - tranamt 
+         if bal < tranamt:
+            messages.info(request,'Low account balance !!!!!!!')
+            return HttpResponseRedirect('/index/')
+         else: 
+             finalbal = bal - tranamt 
       else:
          finalbal = bal + tranamt 
       invm.objects.filter(custnum = fromaccount).update(balance = finalbal)  
@@ -342,3 +352,29 @@ def depdraw(request):
           glifentry = glif(accno = fromaccount, drcr = 'CR', balbefore = bal, balafter = finalbal, tranamt = tranamt,trandate =  date.today(), sysnarr = 'Cash Deposited by self',usernarr = narr  )
           glifentry.save()
       return HttpResponseRedirect('/index/')    
+
+def custdet(request):
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+      user = request.user
+      details = cusm.objects.filter(loginid = user)
+      context={'details_cust' : details}
+      return render(request, 'dispinfo.html', context)
+
+
+def accdet(request):
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+      user = request.user
+      details  = invm.objects.filter(loginid = user)
+      context={'details_cust' : details}
+      return render(request, 'dispaccdetails.html', context)
+
+
+def developer(request):
+     if not request.user.is_authenticated:
+        return render(request, 'main.html')
+     else:
+        return render(request, 'developer.html')
