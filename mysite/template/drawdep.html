@@ -47,7 +47,7 @@
                     <a href="/index">Home</a>
                 </li>
 	          <li> 
-	              <a href="/createcust">Create New Customer account</a>
+	              <a href="/index/createcust">Create New Customer account</a>
 	          </li>
 	          <li>
               <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Create New Account</a>
@@ -97,27 +97,50 @@
 
         <!-- Page Content  -->
      
-
+  {% if messages %}
+    {% for message in messages %}
+  <div class="alert">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+  <strong>Error! </strong>{{ message }}
+</div>
+{% endfor %} 
+    {% endif %}
 	<div class="container-contact100">
 		<div class="wrap-contact100">
-	      <form action = "/addsb/" method = "POST"> {% csrf_token %}
+	      <form action = "/dradepmoney/" method = "POST"> {% csrf_token %}
 				<span class="contact100-form-title">
-				Savings	Account opening 
+				 Withdraw Form
 				</span>
+
+        <div class="wrap-input100 input100-select bg1">
+					<span class="label-input100">Select Withdraw or deposit *</span>
+					<div>
+						<select class="js-select2" name="optionss">
         
-        				<div class="wrap-input100 validate-input bg1" data-validate="Please Type Your Name">
-					<span class="label-input100">Currency</span>
-					<input class="input100" type="text" name="currency" placeholder="Enter Your currency">
-				</div>
-
+							<option value="withdraw">Withdraw</option>
+              <option value="deposit">Deposit</option>
+              </select>
+              
+						<div class="dropDownSelect2"></div>
+					</div>
+        </div>
+      
+       <div class="wrap-input100 input100-select bg1">
+					<span class="label-input100">From Account *</span>
+					<div>
+						<select class="js-select2" name="fracct">
+              {% for item in accnum %} 
+							<option value={{item.custnum}}>{{item.custnum}}</option>
+              {% endfor %}
+              </select>
+              
+						<div class="dropDownSelect2"></div>
+					</div>
+        </div>
+        
 				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter Your Email (e@a.x)">
-					<span class="label-input100">Opening balance</span>
-					<input class="input100" type="text" name="opbal" placeholder="Enter amount here ">
-				</div>
-
-				<div class="wrap-input100 bg1 rs1-wrap-input100">
-					<span class="label-input100">Account Name</span>
-					<input class="input100" type="text" name="acname" placeholder="Enter Name Phone">
+					<span class="label-input100">transaction Amount</span>
+					<input class="input100" type="text" name="trbal" placeholder="Enter amount here ">
 				</div>
 				<div class="wrap-input100 validate-input bg0 rs1-alert-validate" data-validate = "Please Type Your Message">
 					<span class="label-input100">Narration</span>
@@ -127,7 +150,7 @@
 				<div class="container-contact100-form-btn">
 					<button class="contact100-form-btn">
 						<span>
-							Open Account
+              Withdraw
 							<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
 						</span>
 					</button>

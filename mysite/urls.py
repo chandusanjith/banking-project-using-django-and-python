@@ -15,19 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from mysite.views import main, signup,login, index, createcust, addcust, logout, opsavings, fdload, addfd, addsb,loadselftran, selftran, loadtranother, othertran, loadpassbook, loadpbac
+from mysite.views import main, signup,login, index, createcust, addcust, logout, opsavings, fdload, addfd, addsb,loadselftran, selftran, loadtranother, othertran, loadpassbook, loadpbac, loaddepwith, depdraw
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  
+    path('admin/', admin.site.urls), 
     path('main/', main),
     path('signup/', signup),
     path('login/', login),
     path('index/', index),
-    path('index/createcust/', createcust),
+    path('createcust/', createcust),
     path('addcust/', addcust),
     path('logout/', logout),
-    path('index/saving/', opsavings),
-    path('index/fd/', fdload),
+    path('saving/', opsavings),
+    path('fd/', fdload),
     path('addfd/', addfd),
     path('addsb/', addsb),
     path('tranself/', loadselftran),
@@ -35,6 +35,8 @@ urlpatterns = [
     path('tranother/', loadtranother),
     path('othertran/', othertran),
     path('pass/', loadpbac),
-    path('checkpb/', loadpassbook)
+    path('checkpb/', loadpassbook),
+    path('depwith/', loaddepwith),
+    path('dradepmoney/', depdraw)
 
 ]

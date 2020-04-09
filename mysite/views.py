@@ -111,12 +111,17 @@ def logout(request):
 
 
 def opsavings(request):
-  
-  return render(request, 'opsavings.html')  
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+      return render(request, 'opsavings.html')  
 
 
 def fdload(request):
-  return render(request, 'fdaccount.html')
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+      return render(request, 'fdaccount.html')
 
 
 def addfd(request):
@@ -160,11 +165,14 @@ def addsb(request):
     return HttpResponseRedirect('/index/')
 
 def loadselftran(request):
-  user = request.user
-  acdetails = invm.objects.filter(loginid = user)
-  print(acdetails)
-  context={'accnum': acdetails}
-  return render(request, 'selftran.html', context)
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+     user = request.user
+     acdetails = invm.objects.filter(loginid = user)
+     print(acdetails)
+     context={'accnum': acdetails}
+     return render(request, 'selftran.html', context)
 
 
 def selftran(request):
@@ -203,11 +211,14 @@ def selftran(request):
           return HttpResponseRedirect('/index/')
 
 def loadtranother(request):
-  user = request.user
-  acdetails = invm.objects.filter(loginid = user)
-  print(acdetails)
-  context={'accnum': acdetails}
-  return render(request, 'othertran.html', context)
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+     user = request.user
+     acdetails = invm.objects.filter(loginid = user)
+     print(acdetails)
+     context={'accnum': acdetails}
+     return render(request, 'othertran.html', context)
 
 def othertran(request):
    if not request.user.is_authenticated:
@@ -247,14 +258,55 @@ def othertran(request):
           return HttpResponseRedirect('/index/')
 
 def loadpbac(request):
-  user = request.user
-  acdetails = invm.objects.filter(loginid = user)
-  print(acdetails)
-  context={'accnum': acdetails}
-  return render(request, 'selectaccforpass.html', context)
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+    user = request.user
+    acdetails = invm.objects.filter(loginid = user)
+    print(acdetails)
+    context={'accnum': acdetails}
+    return render(request, 'selectaccforpass.html', context)
 
 def loadpassbook(request):
-  acct = request.POST['acct']
-  transactions = glif.objects.filter(accno = acct)
-  context={'trandet': transactions}
-  return render(request, 'passbook.html', context)
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+     acct = request.POST['acct']
+     transactions = glif.objects.filter(accno = acct)
+     context={'trandet': transactions}
+     return render(request, 'passbook.html', context)
+
+def loaddepwith(request):
+  if not request.user.is_authenticated:
+        return render(request, 'main.html')
+  else:
+     user = request.user
+     acdetails = invm.objects.filter(loginid = user)
+     print(acdetails)
+     context={'accnum': acdetails}
+     return render(request, 'drawdep.html', context)
+
+def depdraw(request):
+  if not request.user.is_authenticated:
+      return render(request, 'main.html')
+  else:
+      fromaccount = request.POST['fracct']
+      tranamt = request.POST['trbal']
+      narr = request.POST['nar']
+      option = request.POST['optionss']
+      fa = invm.objects.filter(custnum = fromaccount )
+      bal = fa[0].balance
+      bal = int(bal)
+      tranamt = int(tranamt)
+      if option == 'withdraw':
+         finalbal = bal - tranamt 
+      else:
+         finalbal = bal + tranamt 
+      invm.objects.filter(custnum = fromaccount).update(balance = finalbal)  
+      if option == 'withdraw':
+          glifentry = glif(accno = fromaccount, drcr = 'DR', balbefore = bal, balafter = finalbal, tranamt = tranamt,trandate =  date.today(), sysnarr = 'Cash withdraw by self',usernarr = narr  )
+          glifentry.save()
+      else:
+          glifentry = glif(accno = fromaccount, drcr = 'CR', balbefore = bal, balafter = finalbal, tranamt = tranamt,trandate =  date.today(), sysnarr = 'Cash Deposited by self',usernarr = narr  )
+          glifentry.save()
+      return HttpResponseRedirect('/index/')    
